@@ -39,7 +39,7 @@ El archivo app.py es el punto de entrada porque es el que ejecuto directamente. 
 La ruta / está asociada a la función inicio(). Cuando alguien entra a esa ruta, Flask ejecuta esa función, y esta devuelve el archivo templates/index.html, que es lo que finalmente se muestra en el navegador.
 
 6. ¿Qué evidencia me da la terminal de que el servidor arrancó correctamente?
-La terminal muestra un mensaje indicando que el servidor está corriendo, como “Running on http://127.0.0.1:5000/”
+La terminal muestra un mensaje indicando que el servidor está corriendo
 . Eso confirma que todo está funcionando.
 
 7. Si cambio el HTML y el navegador muestra otra cosa, ¿qué me demuestra eso?
