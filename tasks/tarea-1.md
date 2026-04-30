@@ -23,14 +23,27 @@ Para instalar dependencias y ejecutar el proyecto, sigue el `README.md`.
    Este paso existe para que veas la relacion concreta entre archivo fuente, servidor y resultado en navegador. Codigo que no observas, no lo entendes.
 
 ## Preguntas de reflexion tecnica
+1. ¿Qué problema resuelve el entorno virtual en un proyecto Python?
+El entorno virtual me permite aislar las dependencias de mi proyecto. Así evito conflictos con otras versiones de librerías que tenga instaladas en mi sistema o en otros proyectos.
 
-1. Que problema concreto resuelve el entorno virtual en un proyecto Python?
-2. Que diferencia hay entre instalar `Flask` globalmente y hacerlo dentro de `.venv`?
-3. Por que `requirements.txt` forma parte del proyecto y no de tu maquina personal?
-4. Cuando ejecutas `python app.py`, que archivo actua como punto de entrada y por que?
-5. Que relacion hay entre la ruta `/`, la funcion `inicio()` y el archivo `templates/index.html`?
-6. Que evidencia te da la terminal de que el servidor arranco correctamente?
-7. Si cambias el HTML y el navegador muestra otra cosa, que te demuestra eso sobre el flujo entre backend y frontend en este proyecto?
+2. ¿Qué diferencia hay entre instalar Flask globalmente y hacerlo dentro de .venv?
+Si instalo Flask globalmente, queda disponible para todo el sistema, lo que puede generar conflictos con otros proyectos. En cambio, si lo instalo dentro de .venv, solo ese proyecto usa esa versión específica, lo cual es más ordenado y seguro.
+
+3. ¿Por qué requirements.txt forma parte del proyecto y no de mi máquina personal?
+Porque ahí defino las dependencias necesarias para que el proyecto funcione. Esto permite que cualquier otra persona o servidor pueda instalar exactamente lo mismo y ejecutar el proyecto sin problemas.
+
+4. ¿Cuando ejecuto python app.py, qué archivo actúa como punto de entrada y por qué?
+El archivo app.py es el punto de entrada porque es el que ejecuto directamente. Además, contiene la configuración de la aplicación y el bloque que arranca el servidor.
+
+5. ¿Qué relación hay entre la ruta /, la función inicio() y el archivo templates/index.html?
+La ruta / está asociada a la función inicio(). Cuando alguien entra a esa ruta, Flask ejecuta esa función, y esta devuelve el archivo templates/index.html, que es lo que finalmente se muestra en el navegador.
+
+6. ¿Qué evidencia me da la terminal de que el servidor arrancó correctamente?
+La terminal muestra un mensaje indicando que el servidor está corriendo, como “Running on http://127.0.0.1:5000/”
+. Eso confirma que todo está funcionando.
+
+7. Si cambio el HTML y el navegador muestra otra cosa, ¿qué me demuestra eso?
+Me demuestra que hay una conexión correcta entre el backend y el frontend. Es decir, el servidor está enviando el HTML actualizado y el navegador lo está renderizando correctamente.
 
 ## Entregable
 
