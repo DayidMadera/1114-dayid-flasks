@@ -24,6 +24,15 @@ def hola():
 def css():
     return render_template("css.html")
 
+@app.route('/acerca')
+def acerca():
+    return render_template('acerca.html')
+
+@app.route('/contacto')
+def contacto():
+    return render_template('contacto.html')
+
+
 if __name__ == "__main__":
 
     app.run(debug=True)
