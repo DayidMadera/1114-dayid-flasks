@@ -32,6 +32,15 @@ def acerca():
 def contacto():
     return render_template('contacto.html')
 
+@app.route('/recursos')
+def recursos():
+
+    recursos = ["Documentación oficial de Flask","Curso de Python","Repositorio de GitHub","Tutorial de HTML y CSS"]
+    return render_template(
+        'recursos.html',
+        recursos=recursos
+    )
+
 
 if __name__ == "__main__":
 
