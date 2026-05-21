@@ -88,6 +88,77 @@ def inscripcion():
     return render_template("inscripcion.html", mensaje=mensaje)
 
 
+@app.route("/login", methods=["GET", "POST"])
+def login():
+
+    mensaje = None
+
+    if request.method == "POST":
+
+        usuario = request.form.get("usuario")
+        contraseña = request.form.get("contraseña")
+
+        user = Usuario.query.filter_by(usuario=usuario).first()
+
+        if user and user.verificar_contraseña(contraseña):
+
+            session['usuario_id'] = user.id
+            session['usuario_nombre'] = user.usuario
+            session['rol'] = user.rol
+
+            if user.rol == "profesor":
+                return redirect(url_for("panel_profesor"))
+
+            else:
+                return redirect(url_for("panel_estudiante"))
+
+        else:
+            mensaje = "Usuario o contraseña incorrectos."
+
+    return render_template("login.html", mensaje=mensaje)
+
+@app.route("/logout")
+def logout():
+
+    session.clear()
+
+    return redirect(url_for("inicio"))
+
+@app.route("/estudiantes")
+def estudiantes():
+
+    if 'rol' not in session or session['rol'] != 'profesor':
+        return redirect(url_for("login"))
+
+    lista_estudiantes = Estudiante.query.all()
+
+    return render_template(
+        "estudiantes.html",
+        estudiantes=lista_estudiantes
+    )
+
+@app.route("/panel-profesor")
+def panel_profesor():
+
+    if 'usuario_id' not in session or session['rol'] != 'profesor':
+        return redirect(url_for("login"))
+
+    return render_template(
+        "panel_profesor.html",
+        usuario=session['usuario_nombre']
+    )
+
+@app.route("/panel_estudiante")
+def panel_estudiante():
+
+    if 'usuario_id' not in session or session['rol'] != 'estudiante':
+        return redirect(url_for("login"))
+
+    return render_template(
+        "panel_estudiante.html",
+        usuario=session['usuario_nombre']
+    )
+
 from werkzeug.security import generate_password_hash, check_password_hash
 
 class Usuario(db.Model):
@@ -105,10 +176,7 @@ class Usuario(db.Model):
     def __repr__(self):
         return f'<Usuario {self.usuario}>'
 
-@app.route("/estudiantes")
-def estudiantes():
-    lista_estudiantes = Estudiante.query.all()
-    return render_template("estudiantes.html", estudiantes=lista_estudiantes)
+
 
 if __name__ == "__main__":
 
