@@ -1,9 +1,9 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, session, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 
-# Configurar la base de datos
+app.secret_key = "clave-secreta-super-segura-1114"
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///portal.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -86,6 +86,24 @@ def inscripcion():
                 mensaje = f"Error: Este email ya esta registrado."
     
     return render_template("inscripcion.html", mensaje=mensaje)
+
+
+from werkzeug.security import generate_password_hash, check_password_hash
+
+class Usuario(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    usuario = db.Column(db.String(50), unique=True, nullable=False)
+    contraseña = db.Column(db.String(200), nullable=False)
+    rol = db.Column(db.String(20), nullable=False)  # "profesor" o "estudiante"
+
+    def establecer_contraseña(self, contraseña):
+        self.contraseña = generate_password_hash(contraseña)
+
+    def verificar_contraseña(self, contraseña):
+        return check_password_hash(self.contraseña, contraseña)
+
+    def __repr__(self):
+        return f'<Usuario {self.usuario}>'
 
 @app.route("/estudiantes")
 def estudiantes():
