@@ -9,15 +9,24 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
-class Estudiante(db.Model):
+from werkzeug.security import generate_password_hash, check_password_hash
+
+class Usuario(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    nombre = db.Column(db.String(100), nullable=False)
-    email = db.Column(db.String(100), nullable=False, unique=True)
-    programa = db.Column(db.String(50), nullable=False)
-    fecha_inscripcion = db.Column(db.DateTime, default=db.func.now())
+    usuario = db.Column(db.String(50), unique=True, nullable=False)
+    contraseña = db.Column(db.String(200), nullable=False)
+    rol = db.Column(db.String(20), nullable=False)  # "profesor" o "estudiante"
+
+    def establecer_contraseña(self, contraseña):
+        self.contraseña = generate_password_hash(contraseña)
+
+    def verificar_contraseña(self, contraseña):
+        return check_password_hash(self.contraseña, contraseña)
 
     def __repr__(self):
-        return f'<Estudiante {self.nombre}>'
+        return f'<Usuario {self.usuario}>'
+
+
 
 @app.route("/")
 def inicio():
@@ -89,6 +98,7 @@ def inscripcion():
 
 
 @app.route("/login", methods=["GET", "POST"])
+
 def login():
 
     mensaje = None
@@ -124,6 +134,10 @@ def logout():
 
     return redirect(url_for("inicio"))
 
+from werkzeug.security import generate_password_hash, check_password_hash
+
+
+
 @app.route("/estudiantes")
 def estudiantes():
 
@@ -148,33 +162,12 @@ def panel_profesor():
         usuario=session['usuario_nombre']
     )
 
-@app.route("/panel_estudiante")
+@app.route("/panel-estudiante")
 def panel_estudiante():
-
     if 'usuario_id' not in session or session['rol'] != 'estudiante':
         return redirect(url_for("login"))
-
-    return render_template(
-        "panel_estudiante.html",
-        usuario=session['usuario_nombre']
-    )
-
-from werkzeug.security import generate_password_hash, check_password_hash
-
-class Usuario(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    usuario = db.Column(db.String(50), unique=True, nullable=False)
-    contraseña = db.Column(db.String(200), nullable=False)
-    rol = db.Column(db.String(20), nullable=False)  # "profesor" o "estudiante"
-
-    def establecer_contraseña(self, contraseña):
-        self.contraseña = generate_password_hash(contraseña)
-
-    def verificar_contraseña(self, contraseña):
-        return check_password_hash(self.contraseña, contraseña)
-
-    def __repr__(self):
-        return f'<Usuario {self.usuario}>'
+    
+    return render_template("panel_estudiante.html", usuario=session['usuario_nombre'])
 
 
 
