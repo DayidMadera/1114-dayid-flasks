@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, session, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -10,6 +11,16 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 from werkzeug.security import generate_password_hash, check_password_hash
+
+class Estudiante(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    nombre = db.Column(db.String(100), nullable=False)
+    email = db.Column(db.String(100), nullable=False, unique=True)
+    programa = db.Column(db.String(50), nullable=False)
+    fecha_inscripcion = db.Column(db.DateTime, default=db.func.now())
+
+    def __repr__(self):
+        return f'<Estudiante {self.nombre}>'
 
 class Usuario(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -25,6 +36,19 @@ class Usuario(db.Model):
 
     def __repr__(self):
         return f'<Usuario {self.usuario}>'
+
+class Tarea(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    titulo = db.Column(db.String(100), nullable=False)
+    descripcion = db.Column(db.Text, nullable=False)
+    fecha_entrega = db.Column(db.Date, nullable=False)
+    creada_por = db.Column(db.Integer, db.ForeignKey('usuario.id'), nullable=False)
+    fecha_creacion = db.Column(db.DateTime, default=db.func.now())
+
+    profesor = db.relationship('Usuario', backref='tareas')
+
+    def __repr__(self):
+        return f'<Tarea {self.titulo}>'
 
 
 
@@ -167,8 +191,74 @@ def panel_estudiante():
     if 'usuario_id' not in session or session['rol'] != 'estudiante':
         return redirect(url_for("login"))
     
-    return render_template("panel_estudiante.html", usuario=session['usuario_nombre'])
+    tareas = Tarea.query.all()
+    return render_template("panel_estudiante.html", usuario=session['usuario_nombre'], tareas=tareas)
 
+@app.route("/crear-tarea", methods=["GET", "POST"])
+def crear_tarea():
+    # Solo profesor
+    if 'rol' not in session or session['rol'] != 'profesor':
+        return redirect(url_for("login"))
+    
+    if request.method == "POST":
+        titulo = request.form.get("titulo")
+        descripcion = request.form.get("descripcion")
+        fecha_texto = request.form.get("fecha_entrega") 
+        
+        fecha_convertida = datetime.strptime(fecha_texto, '%Y-%m-%d').date()
+        
+        nueva_tarea = Tarea(
+            titulo=titulo,
+            descripcion=descripcion,
+            fecha_entrega=fecha_convertida, 
+            creada_por=session['usuario_id']
+        )
+        
+        db.session.add(nueva_tarea)
+        db.session.commit()
+        
+        return redirect(url_for("mis_tareas"))
+    
+    return render_template("crear_tarea.html")
+
+@app.route("/mis-tareas")
+def mis_tareas():
+    if 'rol' not in session or session['rol'] != 'profesor':
+        return redirect(url_for("login"))
+    
+    tareas = Tarea.query.all()
+    return render_template("mis_tareas.html", tareas=tareas)
+
+@app.route("/editar-tarea/<int:id>", methods=["GET", "POST"])
+def editar_tarea(id):
+    if 'rol' not in session or session['rol'] != 'profesor':
+        return redirect(url_for("login"))
+    
+    tarea = Tarea.query.get_or_404(id)
+    
+    if request.method == "POST":
+        tarea.titulo = request.form.get("titulo")
+        tarea.descripcion = request.form.get("descripcion")
+        
+        # Convertimos la nueva fecha
+        fecha_texto = request.form.get("fecha_entrega")
+        tarea.fecha_entrega = datetime.strptime(fecha_texto, '%Y-%m-%d').date()
+        
+        db.session.commit()
+        return redirect(url_for("mis_tareas"))
+    
+    return render_template("editar_tarea.html", tarea=tarea)
+
+@app.route("/eliminar-tarea/<int:id>")
+def eliminar_tarea(id):
+    if 'rol' not in session or session['rol'] != 'profesor':
+        return redirect(url_for("login"))
+    
+    tarea = Tarea.query.get_or_404(id)
+    db.session.delete(tarea)
+    db.session.commit()
+    
+    return redirect(url_for("mis_tareas"))
 
 
 if __name__ == "__main__":
