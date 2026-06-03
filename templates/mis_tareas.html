@@ -1,17 +1,22 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Mis Tareas</title>
-</head>
-<body>
-    <h1>Mis Tareas</h1>
-            <li><a href="/">Inicio</a></li>
-    <a href="/crear-tarea"><button>Nueva Tarea</button></a>
+{% extends "base.html" %}
+
+{% block title %}Mis Tareas{% endblock %}
+
+{% block content %}
+<div class="content-card">
+    <h1 style="color: var(--primary-color);">Mis Tareas</h1>
+    
+    <ul class="list-unstyled mb-3">
+        <li><a href="/" class="text-decoration-none fw-bold">Inicio</a></li>
+    </ul>
+
+    <a href="/crear-tarea" class="text-decoration-none">
+        <button class="btn btn-success mb-3">Nueva Tarea</button>
+    </a>
 
     {% if tareas %}
-    <table border="1">
-        <thead>
+    <table border="1" class="table table-hover table-bordered align-middle">
+        <thead class="table-light">
             <tr>
                 <th>Titulo</th>
                 <th>Fecha Entrega</th>
@@ -24,15 +29,15 @@
                 <td>{{ tarea.titulo }}</td>
                 <td>{{ tarea.fecha_entrega }}</td>
                 <td>
-                    <a href="/editar-tarea/{{ tarea.id }}">Editar</a>
-                    <a href="/eliminar-tarea/{{ tarea.id }}" onclick="return confirm('¿Eliminar?')">Eliminar</a>
+                    <a href="/editar-tarea/{{ tarea.id }}" class="btn btn-sm btn-outline-primary me-1">Editar</a>
+                    <a href="/eliminar-tarea/{{ tarea.id }}" class="btn btn-sm btn-outline-danger" onclick="return confirm('¿Eliminar?')">Eliminar</a>
                 </td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
     {% else %}
-    <p>No hay tareas creadas.</p>
+    <p class="alert alert-info mt-3">No hay tareas creadas.</p>
     {% endif %}
-</body>
-</html>
+</div>
+{% endblock %}

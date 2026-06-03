@@ -1,31 +1,49 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Login - Portal Clase 1114</title>
-</head>
-<body>
-    <h1>Login Portal Clase 1114</h1>
-    
-    {% if mensaje %}
-    <p style="color: red;">{{ mensaje }}</p>
-    {% endif %}
+{% extends "base.html" %}
 
-    <form method="POST">
-        <label>Usuario:</label>
-        <input type="text" name="usuario" required>
-        <br><br>
+{% block title %}Login | Clase 1114{% endblock %}
 
-        <label>Contraseña:</label>
-        <input type="password" name="contraseña" required>
-        <br><br>
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+        <div class="content-card">
+            
+            <div class="text-center mb-4">
+                <h1 class="h3 fw-bold" style="color: var(--primary-color);">Iniciar Sesión</h1>
+            </div>
 
-        <button type="submit">Login</button>
-    </form>
+            {% if mensaje %}
+            <div class="alert alert-danger shadow-sm" role="alert">
+                {{ mensaje }}
+            </div>
+            {% endif %}
 
-    <hr>
-    <p>Datos de prueba:</p>
-    <p><strong>Profesor:</strong> usuario=henry, contraseña=password123</p>
-        <p><strong>Estudiante:</strong> usuario=Dayid, contraseña=123</p>
-</body>
-</html>
+            <form method="POST">
+                <div class="mb-3">
+                    <label for="usuario" class="form-label fw-semibold">Usuario:</label>
+                    <input type="text" name="usuario" id="usuario" class="form-control" required>
+                </div>
+
+                <div class="mb-4">
+                    <label for="contraseña" class="form-label fw-semibold">Contraseña:</label>
+                    <input type="password" name="contraseña" id="contraseña" class="form-control" required>
+                </div>
+
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-dark btn-lg">
+                        Login
+                    </button>
+                </div>
+            </form>
+
+            <hr class="my-4">
+
+            <div class="alert alert-light border text-start mb-0" role="alert">
+                <p class="mb-1">Datos de prueba:</p>
+                <p class="mb-1"><strong>Profesor:</strong> usuario=henry, contraseña=password123</p>
+                <p class="mb-0"><strong>Estudiante:</strong> usuario=Dayid, contraseña=123</p>
+            </div>
+            
+        </div>
+    </div>
+</div>
+{% endblock %}

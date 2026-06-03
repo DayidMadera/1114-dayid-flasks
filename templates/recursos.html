@@ -1,25 +1,32 @@
-<!DOCTYPE html>
-<html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>RECURSOS</title>
-  </head>
-  <body>
-        <h1>DAYID ESTEBAN MADERA PAEZ 1114</h1>
-    <h1>Recursos de Clase</h1>
-    <nav>
-    <a href="/">Inicio</a>
-    <a href="/recursos">Recursos</a>
-    <a href="/contacto">contacto</a>
-    <a href="/acerca">acerca de</a>
-    <li><a href="/inscripcion">Inscripcion</a></li>
-    <li><a href="/login">Login</a></li>
-</nav>
-    <ul>
+{% extends "base.html" %}
+
+{% block title %}Recursos | Clase 1114{% endblock %}
+
+{% block content %}
+<div class="content-card">
+    <div class="mb-4">
+        <span class="text-uppercase text-muted fw-bold" style="font-size: 0.85rem; letter-spacing: 1px;">
+            Dayid Esteban Madera Paez 1114
+        </span>
+        <h1 class="h2 mt-2" style="color: var(--primary-color);">Recursos de Clase</h1>
+        <p class="text-secondary">Material de apoyo, documentos y enlaces útiles para la asignatura.</p>
+    </div>
+
+    <hr class="mb-4">
+
+    {% if recursos %}
+    <div class="list-group shadow-sm">
         {% for recurso in recursos %}
-            <li>{{ recurso }}</li>
+        <a href="#" class="list-group-item list-group-item-action d-flex align-items-center p-3">
+            <span class="me-3 fs-5" style="color: var(--primary-color);"></span>
+            <span class="fw-medium">{{ recurso }}</span>
+        </a>
         {% endfor %}
-    </ul>
-  </body>
-</html>
+    </div>
+    {% else %}
+    <div class="alert alert-light border text-center text-muted shadow-sm mt-3" role="alert">
+        Aún no se han publicado recursos para esta clase.
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

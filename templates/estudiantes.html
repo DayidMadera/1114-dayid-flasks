@@ -1,27 +1,14 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Estudiantes - Portal Clase 1114</title>
-</head>
-<body>
-    <!-- MENU -->
-    <nav>
-        <ul>
-            <li><a href="/">Inicio</a></li>
-            <li><a href="/informacion">Informacion</a></li>
-            <li><a href="/recursos">Recursos</a></li>
-            <li><a href="/tareas">Tareas</a></li>
-            <li><a href="/inscripcion">Inscripcion</a></li>
-            <li><a href="/estudiantes">Estudiantes</a></li>
-        </ul>
-    </nav>
+{% extends "base.html" %}
 
-    <h1>Estudiantes Inscritos ({{ estudiantes|length }})</h1>
+{% block title %}Estudiantes - Portal Clase 1114{% endblock %}
+
+{% block content %}
+<div class="content-card">
+    <h1 style="color: var(--primary-color);">Estudiantes Inscritos ({{ estudiantes|length }})</h1>
 
     {% if estudiantes %}
-    <table border="1">
-        <thead>
+    <table border="1" class="table table-hover table-bordered align-middle mt-3">
+        <thead class="table-light">
             <tr>
                 <th>Nombre</th>
                 <th>Email</th>
@@ -41,7 +28,7 @@
         </tbody>
     </table>
     {% else %}
-    <p>No hay estudiantes inscritos aun.</p>
+    <p class="alert alert-info mt-3">No hay estudiantes inscritos aun.</p>
     {% endif %}
-</body>
-</html>
+</div>
+{% endblock %}

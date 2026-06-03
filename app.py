@@ -54,7 +54,21 @@ class Tarea(db.Model):
 
 @app.route("/")
 def inicio():
-    return render_template("index.html")
+    # Definimos la información
+    profesor = "Henry Ortegon"
+    email = "henry@portal1114.edu"
+    horario = "Miercoles y Jueves"
+    aula = "Sala 2"
+    descripcion = "Curso introductorio de programación web usando Python y el framework Flask para desarrollo backend."
+
+    return render_template(
+        "index.html", 
+        profesor=profesor, 
+        email=email, 
+        horario=horario, 
+        aula=aula, 
+        descripcion=descripcion
+    )
 
 
 @app.route("/chao")
@@ -259,6 +273,15 @@ def eliminar_tarea(id):
     db.session.commit()
     
     return redirect(url_for("mis_tareas"))
+
+@app.route("/base")
+def base():
+    return render_template("base.html")
+
+@app.route("/tareas")
+def tares():
+    tareas = Tarea.query.all()
+    return render_template("tareas.html", tareas=tareas)
 
 
 if __name__ == "__main__":

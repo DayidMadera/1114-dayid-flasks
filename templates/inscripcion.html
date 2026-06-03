@@ -1,48 +1,60 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Inscripcion - Portal Clase 1114</title>
-</head>
-<body>
-    <!-- MENU -->
-    <nav>
-        <ul>
-            <li><a href="/">Inicio</a></li>
-            <li><a href="/informacion">Informacion</a></li>
-            <li><a href="/recursos">Recursos</a></li>
-            <li><a href="/tareas">Tareas</a></li>
-            <li><a href="/inscripcion">Inscripcion</a></li>
-        </ul>
-    </nav>
+{% extends "base.html" %}
 
-    <h1>Inscripcion a la Clase</h1>
+{% block title %}Inscripción | Clase 1114{% endblock %}
 
-    <!-- Mostrar mensaje de exito o error -->
-    {% if mensaje %}
-    <p style="color: green; font-weight: bold;">{{ mensaje }}</p>
-    {% endif %}
+{% block content %}
+<!-- Sistema de grillas para centrar el formulario y limitar su ancho -->
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <div class="content-card">
+            
+            <!-- Encabezado del Formulario -->
+            <div class="text-center mb-4">
+                <h1 class="h3 fw-bold" style="color: var(--primary-color);">Inscripción a la Clase</h1>
+                <p class="text-secondary">Completa tus datos para registrarte en el portal.</p>
+            </div>
 
-    <!-- El formulario -->
-    <form method="POST">
-        <label for="nombre">Nombre:</label>
-        <input type="text" name="nombre" id="nombre" required>
-        <br><br>
+            <!-- Mostrar mensaje de éxito o error -->
+            {% if mensaje %}
+            <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
+                {{ mensaje }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+            </div>
+            {% endif %}
 
-        <label for="email">Email:</label>
-        <input type="email" name="email" id="email" required>
-        <br><br>
+            <!-- El formulario -->
+            <form method="POST">
+                
+                <div class="mb-3">
+                    <label for="nombre" class="form-label fw-semibold">Nombre Completo:</label>
+                    <input type="text" name="nombre" id="nombre" class="form-control" placeholder="Ej. Juan Pérez" required>
+                </div>
 
-        <label for="programa">Programa:</label>
-        <select name="programa" id="programa" required>
-            <option value="">-- Selecciona --</option>
-            <option value="Sistemas">Sistemas</option>
-            <option value="Ingenierias">Ingenierias</option>
-            <option value="Otro">Otro</option>
-        </select>
-        <br><br>
+                <div class="mb-3">
+                    <label for="email" class="form-label fw-semibold">Correo Electrónico:</label>
+                    <input type="email" name="email" id="email" class="form-control" placeholder="ejemplo@correo.com" required>
+                </div>
 
-        <button type="submit">Inscribirse</button>
-    </form>
-</body>
-</html>
+                <div class="mb-4">
+                    <label for="programa" class="form-label fw-semibold">Programa Académico:</label>
+                    <select name="programa" id="programa" class="form-select" required>
+                        <!-- 'disabled selected' hace que esta opción sea solo un texto guía -->
+                        <option value="" disabled selected>-- Selecciona un programa --</option>
+                        <option value="Sistemas">Sistemas</option>
+                        <option value="Ingenierias">Ingenierías</option>
+                        <option value="Otro">Otro</option>
+                    </select>
+                </div>
+
+                <!-- d-grid hace que el botón ocupe todo el ancho disponible -->
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-dark btn-lg">
+                        Enviar
+                    </button>
+                </div>
+                
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
