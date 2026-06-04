@@ -76,9 +76,26 @@ def chao():
     return render_template("chao.html")
 
 
-@app.route("/hola")
-def hola(): 
-    return render_template("hola.html")
+@app.route("/informacion") # Esto hace que coincida con el enlace del menú
+def informacion(): 
+    # Datos de la clase
+    aula = "302"
+    profesor = "Henry Ortegon"
+    horario = "miercoles y jueves"
+    objetivos = [
+        "Aprender los fundamentos de Flask",
+        "Conectar Python con bases de datos",
+        "Desarrollar un sistema de gestión de tareas"
+    ]
+    
+    # Aquí renderizas tu archivo "hola.html" con los datos
+    return render_template(
+        "hola.html", 
+        aula=aula, 
+        profesor=profesor, 
+        horario=horario, 
+        objetivos=objetivos
+    )
 
 
 @app.route("/css")
